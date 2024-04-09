@@ -63,7 +63,14 @@ try {
     echo success(array(
         "access_token"=>$token
     ));
-} catch(Exception $err) {
-    echo failed($err);
+} catch (PDOException $e) {
+  echo failed($e->getMessage());
+  if ($e->getCode() === 'HY000') {
+    // Check if data was inserted correctly
+    // If yes, ignore the exception or handle it accordingly
+  } else {
+    // If the error code is not 'HY000' or the data was not inserted correctly, rethrow the exception
+    throw $e;
+  }
 }
 
