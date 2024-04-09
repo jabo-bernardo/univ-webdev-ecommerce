@@ -41,8 +41,6 @@ try {
 
     $account = $existing_response[0];
 
-    echo $password;
-
     // Password check
     $password_matched = @password_verify($password, $account["password"]);
     if (!$password_matched) {

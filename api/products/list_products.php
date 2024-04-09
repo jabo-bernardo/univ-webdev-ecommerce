@@ -13,6 +13,8 @@ try {
         $params[":category_id"] = $_GET["category_id"];
     }
 
+    $sql_query .= " ORDER BY `created_at` DESC";
+
     $db_response = $database->execute_query($sql_query, $params);
 
     echo success($db_response);

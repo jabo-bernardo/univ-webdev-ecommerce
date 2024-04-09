@@ -2,9 +2,9 @@
 
 global $database;
 
-$municipality = check_required_post_data(
-    "municipality",
-    "Municipality is required"
+$region = check_required_post_data(
+    "region",
+    "Region is required"
 );
 
 $barangay = check_required_post_data(
@@ -12,9 +12,19 @@ $barangay = check_required_post_data(
     "Barangay is required"
 );
 
-$street = check_required_post_data(
-    "street",
-    "Street is required"
+$province = check_required_post_data(
+    "province",
+    "Province is required"
+);
+
+$city = check_required_post_data(
+    "city",
+    "City is required"
+);
+
+$unit = check_required_post_data(
+    "unit",
+    "Unit/House # is required"
 );
 
 $access_token = check_required_post_data(
@@ -22,13 +32,7 @@ $access_token = check_required_post_data(
     "Access token is required"
 );
 
-$unit = "";
 $notes = "";
-
-if (isset($_POST["unit"])) {
-	$unit = $_POST["unit"];
-}
-
 if (isset($_POST["notes"])) {
 	$notes = $_POST["notes"];
 }
@@ -46,13 +50,14 @@ try {
         return;
     }
     $account_id = ($token_response[0])["account_id"];
-    $create_shipping_query = "INSERT INTO `shipping_addresses` (municipality, barangay, street, unit, notes, account_id) VALUES (:municipality, :barangay, :street, :unit, :notes, :account_id)";
+    $create_shipping_query = "INSERT INTO `shipping_addresses` (region, province, city, barangay, unit, notes, account_id) VALUES (:region, :province, :city, :barangay, :unit, :notes, :account_id)";
     $database->execute_query(
         $create_shipping_query,
         array(
-            ":municipality"=>$municipality,
+            ":region"=>$region,
+            ":province"=>$province,
+            ":city"=>$city,
             ":barangay"=>$barangay,
-            ":street"=>$street,
             ":unit"=>$unit,
             ":notes"=>$notes,
             ":account_id"=>$account_id

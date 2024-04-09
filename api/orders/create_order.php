@@ -17,6 +17,19 @@ $order_items = check_required_post_data(
     "You must place at least one item in your cart."
 );
 
+$order_attachments = $_POST["order_attachments"];
+$individual_order_attachments = "";
+
+if (isset($order_attachments)) {
+    $individual_order_attachments = explode(",", $order_attachments);
+    $individual_order_attachments = array_filter(
+        $individual_order_attachments,
+        function($image) {
+            return strlen(trim($image)) > 0;
+        }
+    );
+}
+
 $individual_orders = explode(",", $order_items);
 $individual_orders = array_filter(
     $individual_orders,
@@ -72,13 +85,14 @@ try {
     }
 
     // Create order
-    $create_order_query = "INSERT INTO `orders` (`status`, `account_id`, `shipping_address_id`) VALUES (:status, :account_id, :shipping_address_id)";
+    $create_order_query = "INSERT INTO `orders` (`status`, `account_id`, `shipping_address_id`, `attached_files`) VALUES (:status, :account_id, :shipping_address_id, :attached_files)";
     $create_order_response = $database->execute_query(
         $create_order_query,
         array(
             ":status"=>"Awaiting Payment",
             ":account_id"=>$account_id,
-            ":shipping_address_id"=>$shipping_address_id
+            ":shipping_address_id"=>$shipping_address_id,
+            ":attached_files"=>join(",", $individual_order_attachments)
         )
     );
 

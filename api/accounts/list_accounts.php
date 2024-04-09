@@ -5,7 +5,7 @@ global $database;
 try {
     $conn = $database->get_connection();
 
-    $sql_query = "SELECT * FROM `accounts` WHERE 1";
+    $sql_query = "SELECT `id`, `created_at`, `first_name`, `last_name`, `email_address`, `contact_number`, `role` FROM `accounts` WHERE 1";
 
     $params = [];
 
