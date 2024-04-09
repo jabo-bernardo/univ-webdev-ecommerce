@@ -30,10 +30,10 @@ CREATE TABLE `order_items` (
 CREATE TABLE `accounts` (
   `id` int NOT NULL AUTO_INCREMENT,
   `created_at` datetime DEFAULT NOW(),
-  `first_name` varchar(255) NOT NULL,
+  `first_name` varchar(255),
   `last_name` varchar(255),
   `email_address` varchar(255) NOT NULL,
-  `contact_number` varchar(255) NOT NULL,
+  `contact_number` varchar(255),
   `password` varchar(255) NOT NULL,
   `role` varchar(255) DEFAULT "CUSTOMER",
   PRIMARY KEY (`id`)
