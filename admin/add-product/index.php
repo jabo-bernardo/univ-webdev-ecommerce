@@ -34,15 +34,10 @@ include_once "../../layout/default_head.php";
                         </div>
                     </div>
                     <div>
-<!--                        <label for="product-images" class="font-semibold mb-2">Upload Product Images</label>-->
                         <label id="upload-dummy" for="product-images">
                             <button type="button" class="w-full bg-blue-600 p-2 px-4 font-semibold text-white rounded-md hover:bg-blue-700 mt-2">Upload a Product Image</button>
                         </label>
                         <input id="product-images" type="file" class="hidden" multiple/>
-<!--                        <div  class="border-4 rounded-xl p-4 w-full h-[256px] bg-gray-100 border-dashed border-gray-400 flex items-center justify-center flex-col mt-2">-->
-<!--                            <img class="w-20" src="/images/icons/cloud-upload-svgrepo-com.svg"/>-->
-<!--                            <p class="font-bold text-gray-400 mt-2">Drag or Click here to upload file</p>-->
-<!--                        </div>-->
                     </div>
                     <div class="mt-2">
                         <label for="product-name" class="font-semibold mb-2">Product Name</label>

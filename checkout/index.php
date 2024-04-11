@@ -29,15 +29,17 @@
                 <h2 class="text-2xl font-bold text-center">Please attach your designs here</h2>
                 <p class="text-gray-500 text-center">This is an optional step. Only provide if you ordered a custom product</p>
             </section>
-            <section class="mt-2 flex flex-col items-center justify-center w-full">
-                <div class="flex flex-col gap-2 w-8/12">
-                    <div>
-                        <div  class="border-4 rounded-xl p-4 w-full h-[256px] bg-gray-100 border-dashed border-gray-400 flex items-center justify-center flex-col mt-2">
-                            <img class="w-20" src="/images/icons/cloud-upload-svgrepo-com.svg"/>
-                            <label for="file-upload" class="font-bold text-gray-400 mt-2">Drag or Click here to upload file</label>
-                            <input type="file" class="hidden" id="file-upload"/>
-                        </div>
+            <section class="mt-2 mx-auto w-8/12">
+                <div id="designs-container" class="w-full grid grid-cols-1 gap-2">
+                    <div class="w-full h-[64px] bg-gray-200 rounded-md">
+
                     </div>
+                </div>
+                <div>
+                    <label id="upload-dummy" for="design-images">
+                        <button type="button" class="w-full bg-blue-600 p-2 px-4 font-semibold text-white rounded-md hover:bg-blue-700 mt-2">Upload a Design</button>
+                    </label>
+                    <input id="design-images" type="file" class="hidden" multiple/>
                 </div>
             </section>
             <section class="mt-4">
@@ -56,26 +58,69 @@
                 </div>
             </section>
 		</main>
-
-
-        <!--			<section class="my-16 flex justify-center items-center flex-col">-->
-        <!--				<p class="font-bold text-lg">Amount to pay</p>-->
-        <!--				<h3 class="text-8xl m-auto font-bold text-green-500">₱500.00</h3>-->
-        <!--			</section>-->
-        <!--			<section class="mt-4">-->
-        <!--				<h2 class="text-lg font-bold text-center">What's next?</h2>-->
-        <!--				<p class="text-gray-500 text-center">You will need to send the payment on our GCash account <strong>(+63)123 123 1234</strong>, or simply scanning the QR code below</p>-->
-        <!--			</section>-->
-        <!--			<section class="mt-2">-->
-        <!--				<img src="/images/gcash-qr-code.svg" class="w-4/12 m-auto"/>-->
-        <!--			</section>-->
-		<!-- FOOTER -->
 		<?php include_once "../components/footer.php" ?>
 	</article>
 
-	<script>
+	<script defer>
         const productsContainer = document.getElementById("products-container");
         const confirmButton = document.getElementById("confirm-button");
+
+        let designImages = [];
+        const uploadInput = document.querySelector("#design-images");
+        const uploadDummy = document.querySelector("#upload-dummy");
+
+        const handleFileUpload = async () => {
+            const files = uploadInput.files;
+            const accessToken = localStorage.getItem("access_token");
+            console.log(files);
+            for (let i = 0; i < files.length; i++) {
+                const formData = new FormData();
+                formData.append("fileToUpload", files[i]);
+                formData.append("access_token", accessToken);
+                const apiResponse = await fetch("/api/files/upload/", {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await apiResponse.json();
+                if (!data.success) {
+                    alert(`Failed to upload file ${files[i].name}: ${data.reason}`);
+                    continue;
+                }
+                designImages.push(data.data.file_name);
+                handleDesignImagesChange();
+            }
+        }
+
+        const handleDesignImagesChange = () => {
+            const designImagesContainer = document.getElementById("designs-container");
+            designImagesContainer.innerHTML = "";
+
+            designImages.forEach(image => {
+                const imageElement = document.createElement("div");
+                imageElement.classList.add("overflow-hidden", "rounded-lg", "flex", "gap-2");
+                imageElement.innerHTML = `
+                    <div class="flex-grow-0">
+                        <img class="w-16" src="/images/icons/cloud-upload-svgrepo-com.svg"/>
+                    </div>
+                    <div class="flex-grow">
+                        <p class="text-gray-500">${image}</p>
+                    </div>
+                    <div class="flex-grow-0 flex">
+                        <button type="button" class="w-full mt-1 p-2 px-4 bg-white-600 rounded-lg font-semibold hover:bg-gray-100 border-2">View</button>
+                        <button type="button" class="w-full mt-1 p-2 px-4 bg-red-600 rounded-lg font-semibold text-white hover:bg-red-700" data-attachment-value="${image}">Remove</button>
+                    </div>
+                `;
+                designImagesContainer.appendChild(imageElement);
+            });
+
+            if (designImages.length == 0) {
+                designImagesContainer.innerHTML = `
+                <div class="w-full h-[64px] bg-gray-200 rounded-md">
+
+                </div>
+            `
+            }
+        }
 
         const handleToCheckoutProductsLoad = async () => {
             const productsToCheckout = JSON.parse(localStorage.getItem("to_checkout") || "[]");
@@ -84,10 +129,11 @@
             for (let productId of productsToCheckout) {
                 const response = await fetch(`/api/products/select/?product_id=${productId}`);
                 const data = await response.json();
-                console.log(data);
                 if (!data.success) return;
 
                 const product = data.data[0];
+                if (!product) continue;
+
                 const productElement = document.createElement("div");
                 productElement.classList.add("border-2", "rounded-md", "p-4", "grid", "grid-cols-[128px_1fr]", "gap-4", "items-start");
                 productElement.innerHTML = `
@@ -139,28 +185,12 @@
             const shippingAddressId = document.getElementById("shipping-addresses-option").value;
             const accessToken = localStorage.getItem("access_token");
 
-            var fileInput = document.getElementById('file-upload');
-            var file = fileInput.files[0];
-
-            var formData = new FormData();
-            formData.append('fileToUpload', file);
-            formData.append('access_token', accessToken);
-
-            fetch('/api/files/upload/', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => console.log(data))
-                .catch(error => console.error(error));
-
-            return;
-
             try {
                 const formData = new FormData();
                 formData.append("order_items", productsToCheckout.join(","));
                 formData.append("shipping_address_id", shippingAddressId);
                 formData.append("access_token", accessToken);
+                formData.append("attached_files", designImages.join(","));
 
                 const apiResponse = await fetch(`/api/orders/`, {
                     method: "POST",
@@ -181,10 +211,19 @@
         const handlePageLoad = () => {
             handleToCheckoutProductsLoad();
             handleShippingAddressLoad();
+            document.addEventListener('click', function(event) {
+                if (event.target.matches('[data-attachment-value]')) {
+                    const attachmentValue = event.target.getAttribute('data-attachment-value');
+                    designImages = designImages.filter(image => image !== attachmentValue);
+                    handleDesignImagesChange();
+                }
+            });
         }
 
         window.addEventListener("load", handlePageLoad);
         confirmButton.addEventListener("click", handleOrderConfirmation);
+        uploadInput.addEventListener("change", handleFileUpload);
+        uploadDummy.addEventListener("click", () => uploadInput.click());
     </script>
 </body>
 </html>

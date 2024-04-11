@@ -84,9 +84,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mt-2">
-                        <button class="p-2 px-6 bg-blue-700 hover:bg-blue-900 text-white font-semibold rounded-md shadow-xl w-full">+ Add New Address</button>
-                    </div>
+<!--                    <div class="mt-2">-->
+<!--                        <button class="p-2 px-6 bg-blue-700 hover:bg-blue-900 text-white font-semibold rounded-md shadow-xl w-full">+ Add New Address</button>-->
+<!--                    </div>-->
                 </div>
             </div>
         </div>
@@ -150,8 +150,6 @@
             const _order_items = orderData.data.order_items;
             const sumOfOrder = _order_items.reduce((acc, item) => acc + parseFloat(item.price), 0) + parseFloat(SHIPPING_FEE);
 
-                console.log(_order);
-
             orderElement.classList.add("border", "grid", "grid-cols-[128px_1fr]", "rounded-md", "overflow-hidden");
             orderElement.innerHTML = `
                 <div>
@@ -166,12 +164,16 @@
                     </div>
                     <p class="text-gray-500 text-sm">${_order_items.map(item => item.name).join(", ")}</p>
                     <p class="text-lg font-bold mt-4">₱${parseFloat(sumOfOrder).toFixed(1)}</p>
-                    <button class="bg-gray-100 px-2 py-1 rounded-md font-semibold hover:bg-gray-200 text-gray-500 mt-2">
-                        Pay Order
-                    </button>
-                    <button class="bg-red-100 px-2 py-1 rounded-md font-semibold hover:bg-red-200 text-red-500 mt-2">
-                        Cancel Order
-                    </button>
+                    ${_order.status === "Awaiting Payment" ? `
+                        <a href="/checkout/payment/?order_id=${_order.id}">
+                            <button class="bg-gray-100 px-2 py-1 rounded-md font-semibold hover:bg-gray-200 text-gray-500 mt-2">
+                                Pay Order
+                            </button>
+                        </a>
+                        <button class="bg-red-100 px-2 py-1 rounded-md font-semibold hover:bg-red-200 text-red-500 mt-2" data-order-id="${_order.id}">
+                            Cancel Order
+                        </button>
+                    ` : ``}
                 </div>
 
             `;
@@ -218,6 +220,24 @@
         }
     }
 
+    const handleCancelOrder = async (orderId) => {
+        const confirmation = confirm("Are you sure you want to cancel this order?");
+        if (!confirmation) return;
+        const formData = new FormData();
+        formData.append("order_id", orderId);
+        formData.append("status", "Cancelled");
+        const apiResponse = await fetch(`/api/orders/update/?order_id=${orderId}`, {
+            method: "POST",
+            body: formData
+        });
+        const data = await apiResponse.json();
+        if (!data.success) {
+            alert(data.reason);
+            return;
+        }
+        location.reload();
+    }
+
     const handlePageLoad = async () => {
         document.getElementById("logout-button").addEventListener("click", handleLogout);
         if (!localStorage.getItem("access_token")) {
@@ -227,6 +247,12 @@
         await handleUserLoad();
         handleOrdersLoad();
         handleAddressesLoad();
+
+        document.addEventListener("click", event => {
+            if (event.target.matches("[data-order-id]")) {
+                handleCancelOrder(event.target.getAttribute("data-order-id"));
+            }
+        })
     }
 
     window.addEventListener("load", handlePageLoad)

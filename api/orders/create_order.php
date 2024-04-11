@@ -17,7 +17,7 @@ $order_items = check_required_post_data(
     "You must place at least one item in your cart."
 );
 
-$order_attachments = $_POST["order_attachments"];
+$order_attachments = $_POST["attached_files"];
 $individual_order_attachments = "";
 
 if (isset($order_attachments)) {
@@ -72,17 +72,31 @@ try {
         return;
     }
 
-    // Check if all products exists.
-    $in = str_repeat("?, ", count($individual_orders) - 1) . '?';
-    $get_product_query = "SELECT id FROM `products` WHERE id IN ($in)";
-    $product_response = $database->execute_query(
+    if (count($individual_orders) == 1) {
+      $get_product_query = "SELECT id FROM `products` WHERE id = ?";
+      $product_response = $database->execute_query(
         $get_product_query,
         $individual_orders
-    );
-    if (count($product_response) != count($individual_orders)) {
+      );
+      if (count($product_response) != 1) {
         echo failed("Please provide a valid product!");
         exit();
+      }
+    } else {
+      // Check if all products exists.
+      $in = str_repeat("?, ", count($individual_orders) - 1) . "?";
+      $get_product_query = "SELECT id FROM `products` WHERE id IN ($in)";
+      $product_response = $database->execute_query(
+        $get_product_query,
+        $individual_orders
+      );
+      if (count($product_response) != count($individual_orders)) {
+        echo failed("Please provide a valid product!");
+        exit();
+      }
     }
+
+
 
     // Create order
     $create_order_query = "INSERT INTO `orders` (`status`, `account_id`, `shipping_address_id`, `attached_files`) VALUES (:status, :account_id, :shipping_address_id, :attached_files)";

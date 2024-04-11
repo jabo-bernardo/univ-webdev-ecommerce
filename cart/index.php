@@ -97,6 +97,7 @@
                 if (!data.success) return;
 
                 const product = data.data[0];
+                if (!product) return;
                 products.push(product);
 
                 productElement.classList.add("border-2", "rounded-md", "p-4", "grid", "grid-cols-[128px_1fr]", "gap-4", "items-start", "relative");

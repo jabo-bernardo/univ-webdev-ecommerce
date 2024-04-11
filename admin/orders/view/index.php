@@ -37,9 +37,23 @@ include_once "../../../layout/default_head.php";
             <div class="mt-2 border-t flex justify-between">
                 <div></div>
                 <div class="text-right mt-2">
-                    <p class="text-gray-500 mb-1">Subtotal: ₱999.0</p>
-                    <p class="text-gray-500 mb-1">Shipping Fee: ₱0.0</p>
-                    <p class="text-lg font-semibold">Total: ₱999.0</p>
+                    <p class="text-gray-500 mb-1" id="payment-subtotal">Subtotal: ₱999.0</p>
+                    <p class="text-gray-500 mb-1" id="payment-shipping">Shipping Fee: ₱0.0</p>
+                    <p class="text-lg font-semibold" id="payment-totak">Total: ₱999.0</p>
+                </div>
+            </div>
+            <div class="mt-4">
+                <h2 class="font-semibold text-xl">Attached Files</h2>
+            </div>
+            <div class="mt-2">
+                <div class="border rounded-md p-4 flex justify-between items-center">
+                    <div>
+                        <p class="text-gray-600 font-bold">File Name</p>
+                        <p class="text-gray-500">file.pdf</p>
+                    </div>
+                    <a href="/uploads/file.pdf" target="_blank" class="text-blue-600">
+                        <button class="p-2 px-6 bg-blue-600 hover:bg-blue-900 text-white font-semibold rounded-md shadow-xl text-sm">Download</button>
+                    </a>
                 </div>
             </div>
             <div class="mt-4">
@@ -48,11 +62,11 @@ include_once "../../../layout/default_head.php";
             <div class="mt-2">
                 <div class="border rounded-md p-4">
                     <p class="text-gray-600 font-bold">Full Name</p>
-                    <p class="text-gray-500">Joel-Vincent Bernardo</p>
+                    <p class="text-gray-500" id="customer-name">Joel-Vincent Bernardo</p>
                     <p class="text-gray-600 font-bold mt-2">Contact Number</p>
-                    <p class="text-gray-500">09560564142</p>
+                    <p class="text-gray-500" id="contact-number">09560564142</p>
                     <p class="text-gray-600 font-bold mt-2">Address</p>
-                    <p class="text-gray-500">Block 3 Lot 7 Phase 1, Villa Zaragoza, Barangay San Mateo, City of San Jose Del Monte, Bulacan</p>
+                    <p class="text-gray-500" id="shipping-address">Block 3 Lot 7 Phase 1, Villa Zaragoza, Barangay San Mateo, City of San Jose Del Monte, Bulacan</p>
                 </div>
             </div>
             <div class="mt-4">
@@ -63,7 +77,7 @@ include_once "../../../layout/default_head.php";
                     <p class="text-gray-600 font-bold">Payment Method</p>
                     <p class="text-gray-500">GCash</p>
                     <p class="text-gray-600 font-bold mt-2">Payment Status</p>
-                    <p class="text-gray-500">Paid</p>
+                    <p class="text-gray-500" id="payment-status">Paid</p>
                 </div>
             </div>
             <div class="mt-4">
@@ -72,16 +86,16 @@ include_once "../../../layout/default_head.php";
             <div class="mt-2">
                 <div class="border rounded-md p-4">
                     <p class="text-gray-600 font-bold">Status</p>
-                    <p class="text-gray-500">Awaiting Payment</p>
+                    <p class="text-gray-500" id="order-status">Awaiting Payment</p>
                 </div>
                 <div class="mt-2 flex flex-wrap gap-1">
-                    <button class="p-2 px-6 bg-orange-600 hover:bg-orange-900 text-white font-semibold rounded-md shadow-xl text-sm">Mark as Awaiting Payment</button>
-                    <button class="p-2 px-6 bg-green-600 hover:bg-green-900 text-white font-semibold rounded-md shadow-xl text-sm">Mark as Paid</button>
-                    <button class="p-2 px-6 bg-blue-600 hover:bg-blue-900 text-white font-semibold rounded-md shadow-xl text-sm">Mark as Shipping</button>
-                    <button class="p-2 px-6 bg-orange-600 hover:bg-orange-900 text-white font-semibold rounded-md shadow-xl text-sm">Mark as Processing</button>
-                    <button class="p-2 px-6 bg-green-600 hover:bg-green-900 text-white font-semibold rounded-md shadow-xl text-sm">Mark as Completed</button>
-                    <button class="p-2 px-6 bg-red-600 hover:bg-red-900 text-white font-semibold rounded-md shadow-xl text-sm">Mark as Cancelled</button>
-                    <button class="p-2 px-6 bg-red-600 hover:bg-red-900 text-white font-semibold rounded-md shadow-xl text-sm">Mark as Refunded</button>
+                    <button onclick="handleOrderStatusChange('Awaiting Payment')" class="p-2 px-6 bg-orange-600 hover:bg-orange-900 text-white font-semibold rounded-md shadow-xl text-sm">Mark as "Awaiting Payment"</button>
+                    <button onclick="handleOrderStatusChange('Paid')" class="p-2 px-6 bg-green-600 hover:bg-green-900 text-white font-semibold rounded-md shadow-xl text-sm">Mark as "Paid"</button>
+                    <button onclick="handleOrderStatusChange('Processing')" class="p-2 px-6 bg-orange-600 hover:bg-orange-900 text-white font-semibold rounded-md shadow-xl text-sm">Mark as "Processing"</button>
+                    <button onclick="handleOrderStatusChange('Shipping')" class="p-2 px-6 bg-blue-600 hover:bg-blue-900 text-white font-semibold rounded-md shadow-xl text-sm">Mark as "Shipping"</button>
+                    <button onclick="handleOrderStatusChange('Completed')" class="p-2 px-6 bg-green-600 hover:bg-green-900 text-white font-semibold rounded-md shadow-xl text-sm">Mark as "Completed"</button>
+                    <button onclick="handleOrderStatusChange('Cancelled')" class="p-2 px-6 bg-red-600 hover:bg-red-900 text-white font-semibold rounded-md shadow-xl text-sm">Mark as "Cancelled"</button>
+                    <button onclick="handleOrderStatusChange('Refunded')" class="p-2 px-6 bg-red-600 hover:bg-red-900 text-white font-semibold rounded-md shadow-xl text-sm">Mark as "Refunded"</button>
                 </div>
             </div>
         </div>
@@ -97,6 +111,8 @@ include_once "../../../layout/default_head.php";
     const params = new URLSearchParams(window.location.search);
     let orderId = params.get("order_id");
 
+    const productsContainer = document.querySelector("#products-container");
+
     const handleOrderLoad = async () => {
         let apiUrl = `/api/orders/select/?order_id=${orderId}`;
         let response = await fetch(apiUrl);
@@ -109,8 +125,68 @@ include_once "../../../layout/default_head.php";
         const orderResponse = data.data;
         const order = orderResponse.order[0];
         const orderItems = orderResponse.order_items;
-        console.log(order);
-        console.log(orderItems);
+
+        const orderSubtotal = orderItems.reduce((acc, item) => {
+            return acc + parseFloat(item.price);
+        }, 0);
+        const SHIPPING_FEE = 50;
+        const orderTotal = orderSubtotal + parseFloat(SHIPPING_FEE);
+
+        document.querySelector("#order-number").innerText = `Order#${order.id}`;
+        document.querySelector("#payment-subtotal").innerText = `Subtotal: ₱${parseFloat(orderSubtotal).toFixed(1)}`;
+        document.querySelector("#payment-shipping").innerText = `Shipping Fee: ₱${parseFloat(SHIPPING_FEE).toFixed(1)}`;
+        document.querySelector("#payment-totak").innerText = `Total: ₱${parseFloat(orderTotal).toFixed(1)}`;
+
+        productsContainer.innerHTML = "";
+        orderItems.forEach(product => {
+            const productContainer = document.createElement("div");
+            productContainer.classList.add("border", "grid", "grid-cols-[256px_1fr]", "rounded-md", "overflow-hidden");
+            productContainer.innerHTML = `
+                <div>
+                    <img class="h-[150px] w-full rounded-md object-cover" src="/uploads/${product?.images?.split(",")[0]}" />
+                </div>
+                <div class="p-4">
+                    <h2 class="font-bold text-xl">${product.name}</h2>
+                    <p class="text-gray-500 text-sm">${product.description}</p>
+                    <p class="text-lg font-bold mt-4">₱${parseFloat(product.price).toFixed(1)}</p>
+                </div>
+            `;
+            productsContainer.appendChild(productContainer);
+        });
+
+        const shippingAddressResponse = await fetch(`/api/shipping-addresses/select/?shipping_address_id=${order.shipping_address_id}`);
+        const shippingAddressData = await shippingAddressResponse.json();
+        const shippingAddress = shippingAddressData.data[0];
+
+        document.querySelector("#shipping-address").innerText = `${shippingAddress.unit}, ${shippingAddress.barangay}, ${shippingAddress.city}, ${shippingAddress.province}, ${shippingAddress.region}`;
+
+        const customerResponse = await fetch(`/api/accounts/select/?account_id=${order.account_id}`);
+        const customerData = await customerResponse.json();
+        const customer = customerData.data[0];
+
+        document.querySelector("#customer-name").innerText = `${customer.first_name} ${customer.last_name}`;
+        document.querySelector("#contact-number").innerText = customer.contact_number;
+
+        const paymentStatus = order.status === "Awaiting Payment" ? "Unpaid" : "Paid";
+        document.querySelector("#payment-status").innerText = paymentStatus;
+
+        document.querySelector("#order-status").innerText = order.status;
+    }
+
+    const handleOrderStatusChange = async (status) => {
+        const formData = new FormData();
+        formData.append("order_id", orderId);
+        formData.append("status", status);
+        const apiResponse = await fetch(`/api/orders/update/?order_id=${orderId}`, {
+            method: "POST",
+            body: formData
+        });
+        const data = await apiResponse.json();
+        if (!data.success) {
+            alert(data.reason);
+            return;
+        }
+        location.reload();
     }
 
     const handlePageLoad = () => {

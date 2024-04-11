@@ -43,7 +43,7 @@ include_once "../../layout/default_head.php";
 <script>
     const handleCustomersLoad = async () => {
         const customersContainer = document.querySelector("#customers-container");
-        const apiResponse = await fetch("/api/accounts/?role=CUSTOMER");
+        const apiResponse = await fetch("/api/accounts/");
         const data = await apiResponse.json();
         console.log(data);
         if (!data.success) {
