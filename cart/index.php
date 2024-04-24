@@ -103,7 +103,7 @@
                 productElement.classList.add("border-2", "rounded-md", "p-4", "grid", "grid-cols-[128px_1fr]", "gap-4", "items-start", "relative");
                 productElement.innerHTML = `
                     <div>
-                        <img class="h-28 rounded-md object-cover w-full" src="/images/5272436.jpg"/>
+                        <img class="h-28 rounded-md object-cover w-full" src="${"/uploads/" + product.images?.split(",")[0]}"/>
                     </div>
                     <div>
                         <h3 class="font-bold text-lg">${product.name}</h3>

@@ -57,7 +57,7 @@
                 productElement.classList.add("w-72", "h-[18rem]", "rounded-md", "shadow-md", "overflow-hidden", "relative", "cursor-pointer");
                 productElement.innerHTML = `
                     <div>
-                        <img class="h-48 object-cover w-full" src="/images/5272436.jpg"/>
+                        <img class="h-48 object-cover w-full" src="${"/uploads/" + product.images?.split(",")[0] || "/images/missing-image.webp"}"/>
                     </div>
                     <div class="p-4">
                         <h4 class="font-bold">${product.name}</h4>
@@ -86,7 +86,7 @@
                 categoryElement.addEventListener("click", () => handleCategoryClick(category.id, category.name))
                 categoryElement.innerHTML = `
                         <div class="flex-grow-0">
-                            <img src="/images/5272436.jpg" class="w-[128px] h-[80px] object-cover"/>
+                            <img src="/images/missing-image.webp" class="w-[128px] h-[80px] object-cover"/>
                         </div>
                         <div class="flex-grow flex flex-col justify-center px-4">
                             <p class="font-bold text-xl">${category.name}</p>

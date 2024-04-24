@@ -11,7 +11,7 @@
 			<!-- PRODUCT DETAILS -->
 			<section class="grid grid-cols-2 gap-8">
 				<div>
-					<img class="h-96 object-contain bg-gray-100 w-full rounded-md" src="/images/5272436.jpg"/>
+					<img class="h-96 object-contain bg-gray-100 w-full rounded-md" id="product-image" src="/images/5272436.jpg"/>
 				</div>
 				<div>
 					<h1 class="font-bold text-3xl" id="product-name">...</h1>
@@ -24,6 +24,14 @@
 					</div>
 				</div>
 			</section>
+            <section class="mt-8">
+                <div>
+                    <h2 class="font-bold text-xl">Gallery 🖼️</h2>
+                </div>
+                <div class="grid grid-cols-3 mt-4" id="product-images-container">
+
+                </div>
+            </section>
 			<!-- RECOMMENDATIONS -->
 			<section class="mt-8" id="other-products-base">
 				<h2 class="font-bold text-xl">You might also like ✨</h2>
@@ -84,11 +92,22 @@
             if (!data.success) return;
 
             const product = data.data[0];
+            if (!product) return;
+            document.getElementById("product-image").src = "/uploads/" + product.images?.split(",")[0] || "/images/missing-image.webp";
             document.getElementById("product-name").innerText = product.name;
             document.getElementById("category-name") .innerText = product.category_name;
             document.getElementById("product-price").innerText = `₱${parseFloat(product.price).toFixed(1)}`;
             document.getElementById("product-description").innerText = product.description;
             productName = product.name;
+
+            const productImagesContainer = document.getElementById("product-images-container");
+            productImagesContainer.innerHTML = "";
+            product.images?.split(",").forEach(image => {
+                const imageElement = document.createElement("img");
+                imageElement.src = "/uploads/" + image;
+                imageElement.classList.add("h-48", "object-cover", "w-full", "rounded-md", "overflow-hidden");
+                productImagesContainer.appendChild(imageElement);
+            });
 
             // Handle other products
             const otherProductsResponse = await fetch(`/api/products/?category_id=${product.category_id}`);
@@ -108,7 +127,7 @@
                 productElement.classList.add("w-72", "h-[18rem]", "rounded-md", "shadow-md", "overflow-hidden", "relative", "cursor-pointer");
                 productElement.innerHTML = `
                     <div>
-                        <img class="h-48 object-cover w-full" src="/images/5272436.jpg"/>
+                        <img class="h-48 object-cover w-full" src="${"/uploads/" + otherProduct.images?.split(",")[0] || "/images/missing-image.webp"}"/>
                     </div>
                     <div class="p-4">
                         <h4 class="font-bold">${otherProduct.name}</h4>

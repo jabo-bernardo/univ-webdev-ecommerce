@@ -45,16 +45,8 @@ include_once "../../../layout/default_head.php";
             <div class="mt-4">
                 <h2 class="font-semibold text-xl">Attached Files</h2>
             </div>
-            <div class="mt-2">
-                <div class="border rounded-md p-4 flex justify-between items-center">
-                    <div>
-                        <p class="text-gray-600 font-bold">File Name</p>
-                        <p class="text-gray-500">file.pdf</p>
-                    </div>
-                    <a href="/uploads/file.pdf" target="_blank" class="text-blue-600">
-                        <button class="p-2 px-6 bg-blue-600 hover:bg-blue-900 text-white font-semibold rounded-md shadow-xl text-sm">Download</button>
-                    </a>
-                </div>
+            <div class="mt-2 flex flex-col gap-2" id="attachment-containers">
+
             </div>
             <div class="mt-4">
                 <h2 class="font-semibold text-xl">Shipping Address</h2>
@@ -154,6 +146,24 @@ include_once "../../../layout/default_head.php";
             productsContainer.appendChild(productContainer);
         });
 
+        const attachmentContainer = document.querySelector("#attachment-containers");
+        attachmentContainer.innerHTML = "";
+        const attachments = order.attached_files;
+        attachments.split(",").forEach(attachment => {
+            const attachmentElement = document.createElement("div");
+            attachmentElement.classList.add("border", "rounded-md", "p-4", "flex", "justify-between", "items-center");
+            attachmentElement.innerHTML = `
+                <div>
+                    <p class="text-gray-600 font-bold">${attachment}</p>
+                    <p class="text-gray-500">${getFileType(attachment)}</p>
+                </div>
+                <a href="/uploads/${attachment}" download="${attachment}" target="_blank" class="text-blue-600">
+                    <button class="p-2 px-6 bg-blue-600 hover:bg-blue-900 text-white font-semibold rounded-md shadow-xl text-sm">Download</button>
+                </a>
+            `;
+            attachmentContainer.appendChild(attachmentElement);
+        })
+
         const shippingAddressResponse = await fetch(`/api/shipping-addresses/select/?shipping_address_id=${order.shipping_address_id}`);
         const shippingAddressData = await shippingAddressResponse.json();
         const shippingAddress = shippingAddressData.data[0];
@@ -191,6 +201,16 @@ include_once "../../../layout/default_head.php";
 
     const handlePageLoad = () => {
         handleOrderLoad();
+    }
+
+    const getFileType = (filename) => {
+        const match = filename.match(/\.([0-9a-z]+)(?:[\?#]|$)/i);
+        if (match) {
+            const extension = match[1];
+            return extension.toUpperCase() + ' File';
+        } else {
+            return 'Unknown File Type';
+        }
     }
 
     window.addEventListener("load", handlePageLoad)

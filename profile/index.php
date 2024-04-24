@@ -153,7 +153,7 @@
             orderElement.classList.add("border", "grid", "grid-cols-[128px_1fr]", "rounded-md", "overflow-hidden");
             orderElement.innerHTML = `
                 <div>
-                    <img class="h-full rounded-md object-cover" src="/images/5272436.jpg" />
+                    <img class="h-full rounded-md object-cover" src="${"/uploads/" + _order_items[0]?.images?.split(",")[0]}" />
                 </div>
                 <div class="p-4">
                     <div class="flex gap-2 flex-wrap">
