@@ -59,6 +59,7 @@ include_once "../../layout/default_head.php";
 
     const handleAddCategory = async () => {
         const categoryName = document.querySelector("#category-name").value;
+        if (!categoryName || categoryName.trim().length == 0) return alert("Please enter a category name");
         const formData = new FormData();
         formData.append("name", categoryName);
         const response = await fetch("/api/categories/", {
