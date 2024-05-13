@@ -106,11 +106,6 @@ include_once "../../layout/default_head.php";
                                 View
                             </button>
 </a>
-<button
-                                    class="bg-red-100 px-2 py-1 rounded-sm hover:bg-red-200 text-red-500"
-                            >
-                                Delete
-                            </button>
                         </td>
                     </tr>
                 `;

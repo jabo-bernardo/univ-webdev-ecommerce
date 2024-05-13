@@ -35,7 +35,7 @@ try {
 
     if (isset($_POST["submit"])) {
         $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-        if ($check === false) {
+        if ($check == false) {
             echo failed("File is not an image.");
             $uploadOk = 0;
             exit();

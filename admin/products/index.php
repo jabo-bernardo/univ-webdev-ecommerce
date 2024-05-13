@@ -96,7 +96,7 @@ include_once "../../layout/default_head.php";
     }
 
     const handleProductDelete = async (productId) => {
-        const product = products.find(product => product.id === productId);
+        const product = products.find(product => product.id == productId);
         if (!product) {
             alert("Product not found");
             return;

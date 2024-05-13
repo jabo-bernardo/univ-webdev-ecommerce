@@ -177,7 +177,7 @@ include_once "../../../layout/default_head.php";
         document.querySelector("#customer-name").innerText = `${customer.first_name} ${customer.last_name}`;
         document.querySelector("#contact-number").innerText = customer.contact_number;
 
-        const paymentStatus = order.status === "Awaiting Payment" ? "Unpaid" : "Paid";
+        const paymentStatus = order.status == "Awaiting Payment" ? "Unpaid" : "Paid";
         document.querySelector("#payment-status").innerText = paymentStatus;
 
         document.querySelector("#order-status").innerText = order.status;
