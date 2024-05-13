@@ -164,7 +164,7 @@
                     </div>
                     <p class="text-gray-500 text-sm">${_order_items.map(item => item.name).join(", ")}</p>
                     <p class="text-lg font-bold mt-4">₱${parseFloat(sumOfOrder).toFixed(1)}</p>
-                    ${_order.status === "Awaiting Payment" ? `
+                    ${_order.status == "Awaiting Payment" ? `
                         <a href="/checkout/payment/?order_id=${_order.id}">
                             <button class="bg-gray-100 px-2 py-1 rounded-md font-semibold hover:bg-gray-200 text-gray-500 mt-2">
                                 Pay Order
@@ -195,7 +195,7 @@
             return;
         }
 
-        if (data.data.length === 0) {
+        if (data.data.length == 0) {
             location.href = "/onboarding";
             return;
         }

@@ -82,7 +82,7 @@
 
             const cartContainer = document.getElementById("cart-container");
             cartContainer.innerHTML = "";
-            if (cart.length === 0) {
+            if (cart.length == 0) {
                 cartContainer.innerHTML = "<p class='text-center text-gray-500'>No products in your cart</p>";
                 return;
             }
@@ -143,7 +143,7 @@
 
         const handleCheckout = () => {
             const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-            if (cart.length === 0) {
+            if (cart.length == 0) {
                 alert("No products in your cart");
                 return;
             }

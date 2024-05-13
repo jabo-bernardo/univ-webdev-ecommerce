@@ -1,5 +1,5 @@
 <?php
-    $is_dashboard = $_SERVER["REQUEST_URI"] === "/admin/";
+    $is_dashboard = $_SERVER["REQUEST_URI"] == "/admin/";
     $is_products = strpos($_SERVER["REQUEST_URI"], "/admin/products") !== false;
     $is_customers = strpos($_SERVER["REQUEST_URI"], "/admin/customers") !== false;
     $is_orders = strpos($_SERVER["REQUEST_URI"], "/admin/orders") !== false;

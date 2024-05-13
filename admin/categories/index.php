@@ -122,7 +122,7 @@ include_once "../../layout/default_head.php";
     };
 
     const handleCategoryDelete = async (categoryId) => {
-        const category = categories.find(category => category.id === categoryId);
+        const category = categories.find(category => category.id == categoryId);
         const confirmDelete = confirm(`Are you sure you want to delete this "${category.name}" category?`);
         if (!confirmDelete) return;
 

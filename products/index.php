@@ -114,7 +114,7 @@
             const otherProductsData = await otherProductsResponse.json();
             if (!otherProductsData.success) return;
 
-            if (otherProductsData.data.filter(product => product.id != productId).length === 0) {
+            if (otherProductsData.data.filter(product => product.id != productId).length == 0) {
                 document.getElementById("other-products-base").style.display = "none";
                 return;
             }

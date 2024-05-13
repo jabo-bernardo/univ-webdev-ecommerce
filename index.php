@@ -45,7 +45,7 @@
             if (!data.success) return;
 
             productsContainer.innerHTML = "";
-            if (data.data.length === 0) {
+            if (data.data.length == 0) {
                 productsContainer.innerHTML = "<p class='text-center text-gray-500'>No products found</p>";
                 return;
             }
