@@ -30,14 +30,14 @@ try {
 
     $existing_response = $database->execute_query(
         $check_existing__query,
-        array(
+        [
             ":email_address"=>$email_address
-        )
+        ]
     );
-    if (!isset($existing_response[0])) {
-        echo failed("Email does not exists");
-        return;
-    }
+    // if (!isset($existing_response[0])) {
+    //     echo failed("Email does not exists");
+    //     return;
+    // }
 
     $account = $existing_response[0];
 
@@ -52,7 +52,7 @@ try {
     $token = md5(uniqid() . $account["id"]);
 
     $create_token__query = "INSERT INTO `access_tokens` (account_id, token) VALUES (:account_id, :token)";
-    $database->execute_query(
+    $create_token_response = $database->execute_query(
         $create_token__query,
         array(
             ":account_id"=>$account["id"],
@@ -60,9 +60,7 @@ try {
         )
     );
 
-    echo success(array(
-        "access_token"=>$token
-    ));
+    echo success([ "access_token"=>$token ]);
 } catch (PDOException $e) {
   if ($e->getCode() == 'HY000') {
     // Check if data was inserted correctly
@@ -73,4 +71,5 @@ try {
     throw $e;
   }
 }
+
 
