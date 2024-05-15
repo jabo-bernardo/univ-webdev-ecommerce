@@ -80,12 +80,7 @@ include_once "../../layout/default_head.php";
                                     View Orders
                                 </button>
                             </a>
-                            <button
-                                    class="bg-red-100 px-2 py-1 rounded-sm hover:bg-red-200 text-red-500"
-                                    data-customer-id="${customer.id}" data-action="delete"
-                            >
-                                Delete
-                            </button>
+                            
                         </td>
                     </tr>
             `;

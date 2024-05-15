@@ -32,7 +32,7 @@
                     </div>
                 </section>
                 <section>
-                    <a href="/admin">
+                    <a href="/admin" id="go-to-admin">
                         <div class="mt-4">
                             <button class="p-2 px-6 bg-gray-700 hover:bg-gray-900 text-white font-semibold rounded-md shadow-xl w-full">Go to Admin Page</button>
                         </div>
@@ -120,6 +120,9 @@
         }
         const user = data.data[0];
         accountId = user.account_id;
+        if (user.role == "CUSTOMER") {
+            document.getElementById("go-to-admin").remove();
+        }
 
         document.getElementById("account-name").innerText = `${user.first_name} ${user.last_name}`;
         document.getElementById("account-join-date").innerText = new Date(user.created_at).toDateString();
@@ -213,7 +216,7 @@
                     <p class="text-sm text-gray-500">${address.region}</p>
                 </div>
                 <div class="flex items-center p-4 flex-grow-0">
-                    <img class="w-8" src="/images/icons/trash-bin-trash-svgrepo-com.svg"/>
+                    
                 </div>
             `;
             addressesContainer.appendChild(addressElement);
